@@ -12,7 +12,6 @@ import (
 var (
 	port        string
 	contentFile string
-	indexPage   bytes.Buffer
 )
 
 //go:embed static
@@ -25,25 +24,28 @@ func init() {
 }
 
 func main() {
-	page, err := pageContent()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	t, err := template.New("index").Parse(pageTmpl)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = t.Execute(&indexPage, page)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var staticFS = http.FS(assets)
+	staticFS := http.FS(assets)
 	fs := http.FileServer(staticFS)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		page, err := pageContent()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var indexPage bytes.Buffer
+
+		err = t.Execute(&indexPage, page)
+		if err != nil {
+			log.Fatal(err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
 		w.Write(indexPage.Bytes())
 	})
 
