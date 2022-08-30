@@ -1,6 +1,8 @@
 # Float
 
-Minimalist Homelab Start Page.
+Minimalist Configurable Homelab Start Page.
+
+<img width="1054" alt="float-page" src="https://user-images.githubusercontent.com/22131756/187516168-ea10e258-1a0f-4d07-84ff-fa735f3701e6.png">
 
 ## Usage
 
