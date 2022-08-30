@@ -1,0 +1,6 @@
+title: "Vessel"
+page_data:
+  - name: "Grafana"
+    port: 3000
+  - name: "Portainer"
+    port: 9000
