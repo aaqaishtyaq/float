@@ -1,17 +1,16 @@
 package main
 
 import (
-	"bytes"
 	"embed"
 	"flag"
-	"html/template"
-	"log"
-	"net/http"
+	"fmt"
+	"os"
 )
 
 var (
 	port        string
 	contentFile string
+	buildString = "dev"
 )
 
 //go:embed static
@@ -24,33 +23,13 @@ func init() {
 }
 
 func main() {
-	t, err := template.New("index").Parse(pageTmpl)
-	if err != nil {
-		log.Fatal(err)
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "version":
+			fmt.Printf("Float version: %s\n", buildString)
+			os.Exit(0)
+		}
 	}
 
-	staticFS := http.FS(assets)
-	fs := http.FileServer(staticFS)
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		page, err := pageContent()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		var indexPage bytes.Buffer
-
-		err = t.Execute(&indexPage, page)
-		if err != nil {
-			log.Fatal(err)
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-
-		w.Write(indexPage.Bytes())
-	})
-
-	http.Handle("/static/", fs)
-
-	log.Println("Starting http server at port: ", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	serveHTTP()
 }

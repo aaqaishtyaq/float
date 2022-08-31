@@ -1,4 +1,4 @@
-module github.com/aaqaishtyaq/floatpage
+module github.com/aaqaishtyaq/float
 
 go 1.19
 
