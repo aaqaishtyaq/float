@@ -2,7 +2,7 @@
 
 Minimalist Configurable Homelab Start Page.
 
-<img width="1054" alt="float-page" src="https://user-images.githubusercontent.com/22131756/187516168-ea10e258-1a0f-4d07-84ff-fa735f3701e6.png">
+![float-banner](https://user-images.githubusercontent.com/22131756/187611815-29ec322a-40e5-4cbe-9596-49d14ad0bfef.png)
 
 ## Usage
 
@@ -16,7 +16,46 @@ Usage of ./float:
 
 ## Defaults
 
-| ***Flag** |        **Value**       |
+| **Flag** |        **Value**       |
 |:---------:|:----------------------:|
 |   `file`  | `/etc/float/float.yml` |
 |   `port`  |         `8080`         |
+
+## How to run using docker
+
+### Docker Compose
+
+```yaml
+version: "3.9"
+services:
+  float:
+    container_name: float
+    image: ghcr.io/aaqaishtyaq/float:latest
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    volumes:
+      - /mnt/data/float:/etc/float/
+```
+
+### Docker CLI
+
+```console
+docker run \
+  -v /mnt/data/float:/etc/float/ \
+  -p 80:8080 \
+  --restart unless-stopped \
+  --name float \
+  ghcr.io/aaqaishtyaq/float:latest
+```
+
+## Example Configuration
+
+```yaml
+title: "Vessel"
+page_data:
+  - name: "Grafana"
+    port: 3000
+  - name: "Portainer"
+    port: 9000
+```
